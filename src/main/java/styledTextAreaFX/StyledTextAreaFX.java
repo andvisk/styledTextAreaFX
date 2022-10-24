@@ -2,9 +2,6 @@ package styledTextAreaFX;
 
 import javafx.geometry.VPos;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.PathElement;
-import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

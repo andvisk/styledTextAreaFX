@@ -5,24 +5,19 @@ import javafx.scene.shape.Line;
 
 public class Caret {
 
-    long pulseTimeMs = 300;
+    long pulseTimeMs = 500;
     private Line line;
     private boolean visible = false;
 
     public Caret() {
-        line = new Line(1, 1, 50, 50);
+        line = new Line(1, 1, 1, 50);
         new AnimationTimer() {
 
             long prev = -1;
 
             public void handle(long now) {
 
-                long prevPlusPulse = prev + pulseTimeMs *10000;
-                long sub = now - prevPlusPulse;
-
-                System.out.println(sub);
-
-                if(prev < 0 || prev + pulseTimeMs *1000000 >= now) {
+                if(prev < 0 || now - prev >= pulseTimeMs *1000000) {
                     visible = !visible;
                     line.setVisible(visible);
                     prev = now;
