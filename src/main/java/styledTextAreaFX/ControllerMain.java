@@ -29,22 +29,15 @@ public class ControllerMain {
 
         StyledTextAreaFX textArea = new StyledTextAreaFX();
 
-        Text text1 = new Text("Pirmas paragrafas");
+        TextExtended text1 = new TextExtended("Pirmas paragrafas");
         text1.setFont(Font.font ("Verdana", 40));
         text1.setFill(Color.CHOCOLATE);;
-        text1.setOnMouseReleased((mouseEvent) -> {
-            text1.caretPositionProperty().set(7);
 
-            PathElement[] pathElements = text1.rangeShape(1, 2);
-            Path path = new Path(pathElements);
-
-            log.info(text1.selectionEndProperty().get() + " -----");
-        });
 
         textArea.add(text1);
-        textArea.add(new Text("Antras paragrafas"));
-        textArea.add(new Text("Trecias paragrafas"));
-        textArea.add(new Text("Ketvirtas paragrafas"));
+        textArea.add(new TextExtended("Antras paragrafas"));
+        textArea.add(new TextExtended("Trecias paragrafas"));
+        textArea.add(new TextExtended("Ketvirtas paragrafas"));
 
         rootElement.getChildren().add(textArea);
 

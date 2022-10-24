@@ -2,16 +2,25 @@ package styledTextAreaFX;
 
 import javafx.geometry.VPos;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.PathElement;
 import javafx.scene.text.Text;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class StyledTextAreaFX extends FlowPane {
 
-    public StyledTextAreaFX(){
+    private Logger log = LogManager.getLogger(this.getClass());
+
+    public StyledTextAreaFX() {
         super();
         super.rowValignmentProperty().set(VPos.BASELINE);
+
     }
 
-    public void add(Text text){
+    public void add(TextExtended text) {
+
         super.getChildren().add(text);
+
     }
 }
