@@ -32,14 +32,12 @@ public class ControllerMain {
         text1.setFill(Color.CHOCOLATE);;
 
 
-        textArea.add(text1);
-        textArea.add(new TextExtended("Antras paragrafas"));
-        textArea.add(new TextExtended("Trecias paragrafas"));
-        textArea.add(new TextExtended("Ketvirtas paragrafas"));
+        text1.addMeToStyledArea(textArea);
+        new TextExtended("Antras paragrafas").addMeToStyledArea(textArea);
+        new TextExtended("Trecias paragrafas").addMeToStyledArea(textArea);
+        new TextExtended("Ketvirtas paragrafas").addMeToStyledArea(textArea);
 
-        textArea.getChildren().add(new Caret().getLine());
-
-        rootElement.getChildren().add(textArea);
+        rootElement.getChildren().addAll(textArea.getOverlays());
 
         stage.setScene(scene);
         stage.sizeToScene();
