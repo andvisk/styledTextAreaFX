@@ -30,7 +30,7 @@ public class ControllerMain {
         StyledTextAreaFX textArea = new StyledTextAreaFX();
 
         TextExtended text1 = new TextExtended("Pirmas paragrafas");
-        text1.setFont(Font.font ("Verdana", 40));
+        text1.setFont(Font.font ("Verdana", 12));
         text1.setFill(Color.CHOCOLATE);;
 
 
@@ -38,6 +38,8 @@ public class ControllerMain {
         textArea.add(new TextExtended("Antras paragrafas"));
         textArea.add(new TextExtended("Trecias paragrafas"));
         textArea.add(new TextExtended("Ketvirtas paragrafas"));
+
+        textArea.getChildren().add(new Caret().getLine());
 
         rootElement.getChildren().add(textArea);
 
