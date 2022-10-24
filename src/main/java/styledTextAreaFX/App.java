@@ -45,6 +45,7 @@ public class App extends Application {
 
         controller = new ControllerMain();
         controller.init(primaryStage, rootElement);
+
     }
 
 }

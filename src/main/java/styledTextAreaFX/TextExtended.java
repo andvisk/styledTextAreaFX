@@ -22,9 +22,10 @@ public class TextExtended extends Text {
 
     private void onMousePress() {
         super.setOnMousePressed((mouseEvent) -> {
-            styledTextAreaFX.moveCaret(mouseEvent.getX(), mouseEvent.getY(), 20);
 
-            log.info(mouseEvent.getX() + " ----- " + mouseEvent.getY());
+            styledTextAreaFX.moveCaret(mouseEvent.getX(), mouseEvent.getY(), this.getBoundsInParent().getMinX(), this.getBoundsInParent().getMinY(), this.getBoundsInLocal().getHeight(), this.getBaselineOffset());
+
+            log.info(mouseEvent.getX() + " - " + mouseEvent.getY() + ", layout " + this.getBoundsInParent().getMinX() + " - " + this.getBoundsInParent().getMinY() + " height " + this.boundsInLocalProperty().get().getHeight());
         });
     }
 

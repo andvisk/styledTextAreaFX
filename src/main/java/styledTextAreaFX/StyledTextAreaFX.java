@@ -31,28 +31,35 @@ public class StyledTextAreaFX {
         textFlowPane.rowValignmentProperty().set(VPos.BASELINE);
         caretOverlay = new Group();
         caret = new Caret();
+
+
     }
 
     public void addText(TextExtended text) {
         textFlowPane.getChildren().add(text);
     }
 
-    public void moveCaret(double x, double y, double height) {
-        caretOverlay.getChildren().clear();
-        StackPane stackPane = new StackPane();
-        stackPane.setBackground(new Background(new BackgroundFill(Color.rgb(50, 50, 50), CornerRadii.EMPTY, Insets.EMPTY)));
-        stackPane.setMouseTransparent(true);
-        //stackPane.setPrefWidth(x);
-        //stackPane.setPrefHeight(y+height);
-        stackPane.setAlignment(Pos.TOP_RIGHT);
-        caret.getLine().setStartX(x);
-        caret.getLine().setStartY(y);
-        caret.getLine().setEndX(x);
-        caret.getLine().setEndY(y+height);
-        stackPane.getChildren().add(caret.getLine());
-        caretOverlay.getChildren().add(stackPane);
+    public void moveCaret(double textX, double textY, double posX, double posY, double height, double baselineOffset) {
 
-        stackPane.relocate(100, 100);
+        //caret.getStackPane().getChildren().clear();
+        caretOverlay.getChildren().clear();
+
+        caret.getStackPane().setPrefWidth(posX + textX);
+        caret.getStackPane().setPrefHeight(posY + baselineOffset);aa
+
+        caret.getLine().setStartX(posX + textX);
+        caret.getLine().setStartY(posY);
+        caret.getLine().setEndX(posX + textX);
+        caret.getLine().setEndY(posY + baselineOffset);
+
+        caretOverlay.getChildren().add(caret.getStackPane());
+
+        //caret.getStackPane().relocate(x, y*-1);
+        //log.info("stack pane " + caret.getStackPane().getLayoutX() + " - " + caret.getStackPane().getLayoutY());
+
+        /*caret.getStackPane().setLayoutX(15);
+        caret.getStackPane().setLayoutY(15);*/
+
     }
 
     public List<Node> getOverlays() {

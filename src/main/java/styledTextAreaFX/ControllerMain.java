@@ -23,12 +23,14 @@ public class ControllerMain {
 
         this.stage = stage;
 
+        rootElement.setPrefSize(stageWidth, stageHeight);
+
         Scene scene = new Scene(rootElement, stageWidth, stageHeight);
 
         StyledTextAreaFX textArea = new StyledTextAreaFX();
 
         TextExtended text1 = new TextExtended("Pirmas paragrafas");
-        text1.setFont(Font.font ("Verdana", 12));
+        text1.setFont(Font.font ("Verdana", 40));
         text1.setFill(Color.CHOCOLATE);;
 
 
