@@ -17,8 +17,10 @@ public class Caret {
 
             public void handle(long now) {
 
-                long prevPlusPulse = prev + pulseTimeMs *1000000;
+                long prevPlusPulse = prev + pulseTimeMs *10000;
                 long sub = now - prevPlusPulse;
+
+                System.out.println(sub);
 
                 if(prev < 0 || prev + pulseTimeMs *1000000 >= now) {
                     visible = !visible;
