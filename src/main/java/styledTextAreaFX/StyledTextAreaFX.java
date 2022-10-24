@@ -42,16 +42,17 @@ public class StyledTextAreaFX {
         StackPane stackPane = new StackPane();
         stackPane.setBackground(new Background(new BackgroundFill(Color.rgb(50, 50, 50), CornerRadii.EMPTY, Insets.EMPTY)));
         stackPane.setMouseTransparent(true);
-        stackPane.setPrefWidth(x);
-        stackPane.setPrefHeight(y+height);
+        //stackPane.setPrefWidth(x);
+        //stackPane.setPrefHeight(y+height);
         stackPane.setAlignment(Pos.TOP_RIGHT);
         caret.getLine().setStartX(x);
         caret.getLine().setStartY(y);
         caret.getLine().setEndX(x);
         caret.getLine().setEndY(y+height);
         stackPane.getChildren().add(caret.getLine());
-        stackPane.relocate(x, y*-1);
         caretOverlay.getChildren().add(stackPane);
+
+        stackPane.relocate(100, 100);
     }
 
     public List<Node> getOverlays() {
