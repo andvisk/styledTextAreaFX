@@ -29,16 +29,6 @@ public class ControllerMain {
 
         StyledTextAreaFX textArea = new StyledTextAreaFX(rootElement);
 
-        TextExtended text1 = new TextExtended("Pirmas paragrafas");
-        text1.setFont(Font.font ("Verdana", 40));
-        text1.setFill(Color.CHOCOLATE);;
-
-
-        text1.addMeToStyledArea(textArea);
-        new TextExtended("Antras paragrafas").addMeToStyledArea(textArea);
-        new TextExtended("Trecias paragrafas").addMeToStyledArea(textArea);
-        new TextExtended("Ketvirtas paragrafas").addMeToStyledArea(textArea);
-
         stage.setScene(scene);
         stage.sizeToScene();
         stage.show();
@@ -46,20 +36,22 @@ public class ControllerMain {
         stage.setMinWidth(stage.getWidth());
         stage.setMinHeight(stage.getHeight());
 
+        Paragraph paragraph = new Paragraph();
 
-    }
+        TextExtended text1 = new TextExtended("Pirmas tekstas", textArea);
+        text1.setFont(Font.font ("Verdana", 40));
+        text1.setFill(Color.CHOCOLATE);;
 
-    private double computeTextWidth(Font font, String text, double wrappingWidth) {
-        Text helper = new Text();
-        helper.setFont(font);
-        helper.setText(text);
-        // Note that the wrapping width needs to be set to zero before
-        // getting the text's real preferred width.
-        helper.setWrappingWidth(0);
-        helper.setLineSpacing(0);
-        double w = Math.min(helper.prefWidth(-1), wrappingWidth);
-        helper.setWrappingWidth((int) Math.ceil(w));
-        double textWidth = Math.ceil(helper.getLayoutBounds().getWidth());
-        return textWidth;
+        paragraph.addTexts(text1);
+        paragraph.addTexts(new TextExtended("Antras tekstas", textArea));
+        paragraph.addTexts(new TextExtended("Trecias tekstas", textArea));
+        paragraph.addTexts(new TextExtended("Ketvirtas tekstas", textArea));
+
+        Paragraph paragraph2 = new Paragraph();
+        paragraph2.addTexts(new TextExtended("Penktas tekstas", textArea));
+        paragraph2.addTexts(new TextExtended("Sestas tekstas", textArea));
+        paragraph2.addTexts(new TextExtended("Septintas tekstas", textArea));
+
+        textArea.addParagraphs(paragraph, paragraph2);
     }
 }

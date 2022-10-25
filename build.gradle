@@ -54,4 +54,10 @@ sourceSets {
     }
 }
 
+run{
+    jvmArgs = [
+            "-Dsun.awt.disablegrab=true"
+    ]
+}
+
 
