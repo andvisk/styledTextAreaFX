@@ -17,16 +17,19 @@ public class Caret {
     private Line line;
     private boolean visible = false;
     private StackPane stackPane;
+    private int stackPaneWidth = 10;
 
-    public Caret() {
+    public Caret(Group caretOverlay) {
 
         line = new Line(1, 1, 1, 50);
 
         stackPane = new StackPane();
-        //stackPane.setBackground(new Background(new BackgroundFill(Color.rgb(50, 50, 50), CornerRadii.EMPTY, Insets.EMPTY)));
+        //stackPane.setBackground(new Background(new BackgroundFill(Color.rgb(50, 100, 150), CornerRadii.EMPTY, Insets.EMPTY)));
         stackPane.setMouseTransparent(true);
         stackPane.setAlignment(Pos.BOTTOM_RIGHT);
         stackPane.getChildren().add(line);
+
+        caretOverlay.getChildren().add(stackPane);
 
 
         new AnimationTimer() {
@@ -50,5 +53,9 @@ public class Caret {
 
     public StackPane getStackPane(){
         return stackPane;
+    }
+
+    public int getStackPaneWidth(){
+        return stackPaneWidth;
     }
 }

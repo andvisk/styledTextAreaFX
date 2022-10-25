@@ -27,7 +27,7 @@ public class ControllerMain {
 
         Scene scene = new Scene(rootElement, stageWidth, stageHeight);
 
-        StyledTextAreaFX textArea = new StyledTextAreaFX();
+        StyledTextAreaFX textArea = new StyledTextAreaFX(rootElement);
 
         TextExtended text1 = new TextExtended("Pirmas paragrafas");
         text1.setFont(Font.font ("Verdana", 40));
@@ -38,8 +38,6 @@ public class ControllerMain {
         new TextExtended("Antras paragrafas").addMeToStyledArea(textArea);
         new TextExtended("Trecias paragrafas").addMeToStyledArea(textArea);
         new TextExtended("Ketvirtas paragrafas").addMeToStyledArea(textArea);
-
-        rootElement.getChildren().addAll(textArea.getOverlays());
 
         stage.setScene(scene);
         stage.sizeToScene();
