@@ -31,22 +31,25 @@ public class TextExtended extends Text {
 
     public TextExtended(String text, String font, double fontSize, Color fillColor, StyledTextAreaFX styledTextAreaFX) {
         super(text);
-        setFont(Font.font (font, fontSize));
+        setFont(Font.font(font, fontSize));
         setFill(fillColor);
         this.font = font;
         this.fontSize = fontSize;
         this.fillColor = fillColor;
         this.styledTextAreaFX = styledTextAreaFX;
-        onMousePress();
-        onMouseReleased();
+        /*onMousePress();
+        onMouseReleased();*/
     }
 
+    //todo remove
     private void onMousePress() {
         super.setOnMousePressed((mouseEvent) -> {
+            log.info("root bounds: " + this.getBoundsInParent());
             styledTextAreaFX.getCaret().moveCaret(mouseEvent.getX(), mouseEvent.getY(), this);
         });
     }
 
+    //todo remove
     private void onMouseReleased() {
         super.setOnMouseReleased((mouseEvent) -> {
             styledTextAreaFX.selectText(mouseEvent.getX(), mouseEvent.getY(), this);
@@ -98,4 +101,8 @@ public class TextExtended extends Text {
         return paths;
     }
 
+    @Override
+    public String toString() {
+        return "TextExtended{" + this.getText() + "}";
+    }
 }

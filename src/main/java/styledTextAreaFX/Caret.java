@@ -8,8 +8,12 @@ import javafx.scene.Group;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Caret {
+
+    private Logger log = LogManager.getLogger(this.getClass());
 
     long pulseTimeMs = 500;
     private Line line;
@@ -76,9 +80,13 @@ public class Caret {
         PathIndex nearestPathIndex = new PathIndex(text, textX);
         double relocateX = posX + nearestPathIndex.getNearestPathX();
 
-        if (relocateX < 0) relocateX = 0;
+        if (relocateX < 0) {
+            relocateX = 0;
+        }
         double relocateY = posY;
-        if (relocateY < 0) relocateY = 0;
+        if (relocateY < 0) {
+            relocateY = 0;
+        }
 
         stackPane.relocate(relocateX, relocateY);
 

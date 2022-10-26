@@ -16,29 +16,31 @@ public class ControllerMain {
 
     private Stage stage;
 
-    private int stageWidth = 450;
-    private int stageHeight = 300;
+    private int sceneWidth = 450;
+    private int sceneHeight = 350;
 
     protected void init(Stage stage, StackPane rootElement) {
 
         this.stage = stage;
 
-        rootElement.setPrefSize(stageWidth, stageHeight);
-
-        Scene scene = new Scene(rootElement, stageWidth, stageHeight);
+        Scene scene = new Scene(rootElement, sceneWidth, sceneHeight);
 
         StyledTextAreaFX textArea = new StyledTextAreaFX(rootElement);
 
         stage.setScene(scene);
-        stage.sizeToScene();
         stage.show();
 
-        stage.setMinWidth(stage.getWidth());
-        stage.setMinHeight(stage.getHeight());
+        stage.setMinWidth(sceneWidth);
+        stage.setMinHeight(sceneHeight);
 
+        addText(textArea);
+    }
+
+    //todo remove
+    private void addText(StyledTextAreaFX textArea){
         Paragraph paragraph = new Paragraph();
 
-        paragraph.addTexts(new TextExtended("Pirmas tekstas", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph.addTexts(new TextExtended("Pirmas tekstas", "Verdana", 40, Color.CHOCOLATE, textArea));
         paragraph.addTexts(new TextExtended(" ", "Verdana", 18, Color.CHOCOLATE, textArea));
         paragraph.addTexts(new TextExtended("Antras tekstas", "Verdana", 18, Color.CHOCOLATE, textArea));
         paragraph.addTexts(new TextExtended(" ", "Verdana", 18, Color.CHOCOLATE, textArea));
