@@ -10,6 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import org.apache.logging.log4j.LogManager;
@@ -24,23 +25,31 @@ public class TextExtended extends Text {
     private Logger log = LogManager.getLogger(this.getClass());
     private StyledTextAreaFX styledTextAreaFX;
     private List<Path> paths;
+    private String font;
+    private double fontSize;
+    private Color fillColor;
 
-    public TextExtended(String text, StyledTextAreaFX styledTextAreaFX) {
+    public TextExtended(String text, String font, double fontSize, Color fillColor, StyledTextAreaFX styledTextAreaFX) {
         super(text);
+        setFont(Font.font (font, fontSize));
+        setFill(fillColor);
+        this.font = font;
+        this.fontSize = fontSize;
+        this.fillColor = fillColor;
         this.styledTextAreaFX = styledTextAreaFX;
-        mouseActionsInit();
-    }
-
-    private void mouseActionsInit() {
         onMousePress();
-        onMouseRelease();
+        onMouseReleased();
     }
 
     private void onMousePress() {
         super.setOnMousePressed((mouseEvent) -> {
+            styledTextAreaFX.getCaret().moveCaret(mouseEvent.getX(), mouseEvent.getY(), this);
+        });
+    }
 
-            styledTextAreaFX.moveCaret(mouseEvent.getX(), mouseEvent.getY(), this);
-
+    private void onMouseReleased() {
+        super.setOnMouseReleased((mouseEvent) -> {
+            styledTextAreaFX.selectText(mouseEvent.getX(), mouseEvent.getY(), this);
         });
     }
 
@@ -82,17 +91,6 @@ public class TextExtended extends Text {
         this.styledTextAreaFX = styledTextAreaFX;
     }
 
-    private void onMouseRelease() {
-        /*super.setOnMouseReleased((mouseEvent) -> {
-            super.caretPositionProperty().set(7);
-
-            PathElement[] pathElements = super.rangeShape(1, 2);
-            Path path = new Path(pathElements);
-
-            log.info(super.selectionEndProperty().get() + " -----");
-        });*/
-    }
-
     public List<Path> getPaths() {
         if (paths == null || paths.size() <= 0) {
             calculatePaths();
@@ -100,37 +98,4 @@ public class TextExtended extends Text {
         return paths;
     }
 
-    public int getNearestPathIndex(double x) {
-        double closestX = -1;
-        List<Path> paths = getPaths();
-        int index = -1;
-        int indexToReturn = -1;
-        for (Path path : paths) {
-            ++index;
-            double deltaLeft = Math.abs(path.getBoundsInParent().getMinX() - x);
-            double deltaRight = Math.abs(path.getBoundsInParent().getMinX() + path.getBoundsInLocal().getWidth() - x);
-            if(closestX < 0 || closestX > deltaLeft){
-                closestX = deltaLeft;
-                indexToReturn = index;
-            }
-            if(closestX > deltaRight){
-                closestX = deltaRight;
-                indexToReturn = index + 1;
-            }
-        }
-        log.info("nearest index " + indexToReturn);
-        return indexToReturn;
-    }
-
-    public double getNearestPathX(double x){
-        double xToReturn = - 1;
-        List<Path> paths = getPaths();
-        int index = getNearestPathIndex(x);
-        if(index == paths.size()){
-            Path path = paths.get(paths.size()-1);
-            return path.getBoundsInParent().getMinX() + path.getBoundsInLocal().getWidth();
-        }else{
-            return paths.get(index).getBoundsInParent().getMinX();
-        }
-    }
 }

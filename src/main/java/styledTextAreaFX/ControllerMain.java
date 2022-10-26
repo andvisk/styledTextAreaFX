@@ -38,19 +38,20 @@ public class ControllerMain {
 
         Paragraph paragraph = new Paragraph();
 
-        TextExtended text1 = new TextExtended("Pirmas tekstas", textArea);
-        text1.setFont(Font.font ("Verdana", 40));
-        text1.setFill(Color.CHOCOLATE);;
-
-        paragraph.addTexts(text1);
-        paragraph.addTexts(new TextExtended("Antras tekstas", textArea));
-        paragraph.addTexts(new TextExtended("Trecias tekstas", textArea));
-        paragraph.addTexts(new TextExtended("Ketvirtas tekstas", textArea));
+        paragraph.addTexts(new TextExtended("Pirmas tekstas", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph.addTexts(new TextExtended(" ", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph.addTexts(new TextExtended("Antras tekstas", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph.addTexts(new TextExtended(" ", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph.addTexts(new TextExtended("Trecias tekstas", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph.addTexts(new TextExtended(" ", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph.addTexts(new TextExtended("Ketvirtas tekstas", "Verdana", 18, Color.CHOCOLATE, textArea));
 
         Paragraph paragraph2 = new Paragraph();
-        paragraph2.addTexts(new TextExtended("Penktas tekstas", textArea));
-        paragraph2.addTexts(new TextExtended("Sestas tekstas", textArea));
-        paragraph2.addTexts(new TextExtended("Septintas tekstas", textArea));
+        paragraph2.addTexts(new TextExtended("Penktas tekstas", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph2.addTexts(new TextExtended(" ", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph2.addTexts(new TextExtended("Sestas tekstas", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph2.addTexts(new TextExtended(" ", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph2.addTexts(new TextExtended("Septintas tekstas", "Verdana", 18, Color.CHOCOLATE, textArea));
 
         textArea.addParagraphs(paragraph, paragraph2);
     }

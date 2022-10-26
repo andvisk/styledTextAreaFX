@@ -51,6 +51,21 @@ public class StyledTextAreaFX {
 
         paragraphList = new ArrayList<>();
 
+        onMousePress();
+        onMouseReleased();
+    }
+
+    private void onMousePress() {
+        scrollPane.setOnMousePressed((mouseEvent) -> {
+            //styledTextAreaFX.getCaret().moveCaret(mouseEvent.getX(), mouseEvent.getY(), this);
+            log.info("scroll pane pressed"); aa
+        });
+    }
+
+    private void onMouseReleased() {
+        scrollPane.setOnMouseReleased((mouseEvent) -> {
+            //styledTextAreaFX.selectText(mouseEvent.getX(), mouseEvent.getY(), this);
+        });
     }
 
     public void addParagraphs(Paragraph... paragraphs) {
@@ -58,39 +73,11 @@ public class StyledTextAreaFX {
         Arrays.asList(paragraphs).stream().forEach(p -> p.addMe(scrollPane, textOverlay));
     }
 
-    public void moveCaret(double textX, double textY, TextExtended text) {
+    public void selectText(double textX, double textY, TextExtended text){
 
-        FlowPane paragraphFlowPane = (FlowPane) text.getParent(); //FlowPane represents paragraph
-        FlowPane textAreaFlowPane = (FlowPane) paragraphFlowPane.getParent(); //FlowPane represents paragraphs flow
+    }
 
-        Bounds textBounds = text.getBoundsInParent();
-        Bounds paragraphBounds = paragraphFlowPane.getBoundsInParent();
-        Bounds textAreaBounds = textAreaFlowPane.getBoundsInParent();
-
-        caret.getStackPane().setPrefWidth(caret.getStackPaneWidth());
-        caret.getStackPane().setPrefHeight(textBounds.getHeight());
-
-        caret.getLine().setStartX(1);
-        caret.getLine().setStartY(1);
-        caret.getLine().setEndX(1);
-        caret.getLine().setEndY(textBounds.getHeight());
-
-        double posX = textBounds.getMinX() + paragraphBounds.getMinX() + textAreaBounds.getMinX();
-        double posY = textBounds.getMinY() + paragraphBounds.getMinY() + textAreaBounds.getMinY();
-
-        double nearestIndex = text.getNearestPathIndex(textX);
-        double relocateX = posX + text.getNearestPathX(textX);
-
-        if (relocateX < 0) relocateX = 0;
-        double relocateY = posY;
-        if (relocateY < 0) relocateY = 0;
-
-        caret.getStackPane().relocate(relocateX, relocateY);
-
-        caret.restartPulse();
-
-        log.info("posX " + (posX + textX) + " posY " + posY);
-
-
+    public Caret getCaret(){
+        return caret;
     }
 }

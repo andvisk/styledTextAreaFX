@@ -5,3 +5,6 @@ bin
 .vscode
 debug_*
 .DS_Store
+/.classpath
+/.project
+/.settings/
