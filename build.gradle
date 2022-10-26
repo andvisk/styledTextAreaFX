@@ -4,6 +4,7 @@
 
 plugins {
     id 'application'
+    id 'eclipse'
     id 'org.openjfx.javafxplugin' version '0.0.10'
 }
 
@@ -16,6 +17,21 @@ java {
 javafx {
     version = "17"
     modules = ['javafx.controls']
+}
+
+project.afterEvaluate{
+    println '=========================='
+    project.tasks.withType(AbstractCompile, {
+        it.options.classpath = ''
+    })
+    def containerPrefix = 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/'
+    project.eclipse.classpath{
+
+        containers.removeAll{it.startsWith(containerPrefix)}
+        containers.add(containerPrefix + 'JavaSE-17/')
+        println containers
+    }
+    println '=========================='
 }
 
 repositories {
