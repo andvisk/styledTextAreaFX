@@ -61,23 +61,22 @@ public class StyledTextAreaFX {
 
     private void onMousePress() {
         scrollPane.setOnMousePressed((mouseEvent) -> {
-            Paragraph paragraph = getParagraphByCoord(mouseEvent.getX(), mouseEvent.getY());
-            if (paragraph != null) {
-                log.info("selected paragraph: " + paragraph.toString());
-                TextExtended text = getTextByCoord(paragraph, mouseEvent.getX(), mouseEvent.getY());
-                if (text != null) {
-                    Bounds textBoundsInParagraph = text.getBoundsInParent();
-                    Bounds textBoundsInAllParagraphsFlowPane = paragraph.localToParent(textBoundsInParagraph);
-                    log.info("selected text: " + text.toString());
-                    caret.moveCaret(mouseEvent.getX()-textBoundsInAllParagraphsFlowPane.getMinX(), mouseEvent.getY()-textBoundsInAllParagraphsFlowPane.getMinY(), text);
-                }
+            TextExtended text = getTextByCoord(mouseEvent.getX(), mouseEvent.getY());
+            if (text != null) {
+                log.info("selected text: " + text.toString());
+                MousePosition mousePositionLocal = text.getLocalMousePosition(mouseEvent.getX(), mouseEvent.getY());
+                caret.moveCaret(mousePositionLocal.x(), mousePositionLocal.y(), text);
             }
         });
     }
 
     private void onMouseReleased() {
         rootElement.setOnMouseReleased((mouseEvent) -> {
-            //styledTextAreaFX.selectText(mouseEvent.getX(), mouseEvent.getY(), this);
+            TextExtended text = getTextByCoord(mouseEvent.getX(), mouseEvent.getY());
+            if (text != null) {
+                log.info("mouse release text: " + text.toString());
+
+            }
         });
     }
 
@@ -86,21 +85,22 @@ public class StyledTextAreaFX {
         Arrays.asList(paragraphs).stream().forEach(p -> p.addMe(scrollPane, textOverlay));
     }
 
-    private Paragraph getParagraphByCoord(double mouseEventX, double mouseEventY) {
-        Paragraph paragraph = paragraphList.stream().parallel().filter(p -> {
-            Bounds paragraphBoundsInParent = p.getBoundsInParent();
-            return checkCoordIsWithinBounds(paragraphBoundsInParent, mouseEventX, mouseEventY);
-        }).findAny().orElse(null);
-        return paragraph;
-    }
-
-    private TextExtended getTextByCoord(Paragraph paragraph, double mouseEventX, double mouseEventY) {
+    private TextExtended getTextByCoord(double mouseEventX, double mouseEventY) {
+        Paragraph paragraph = getParagraphByCoord(mouseEventX, mouseEventY);
         TextExtended text = paragraph.getListText().stream().filter(p -> {
             Bounds textBoundsInParagraph = p.getBoundsInParent();
             Bounds textBoundsInAllParagraphsFlowPane = paragraph.localToParent(textBoundsInParagraph);
             return checkCoordIsWithinBounds(textBoundsInAllParagraphsFlowPane, mouseEventX, mouseEventY);
         }).findAny().orElse(null);
         return text;
+    }
+
+    private Paragraph getParagraphByCoord(double mouseEventX, double mouseEventY) {
+        Paragraph paragraph = paragraphList.stream().parallel().filter(p -> {
+            Bounds paragraphBoundsInParent = p.getBoundsInParent();
+            return checkCoordIsWithinBounds(paragraphBoundsInParent, mouseEventX, mouseEventY);
+        }).findAny().orElse(null);
+        return paragraph;
     }
 
     private boolean checkCoordIsWithinBounds(Bounds bounds, double checkX, double checkY) {

@@ -37,23 +37,6 @@ public class TextExtended extends Text {
         this.fontSize = fontSize;
         this.fillColor = fillColor;
         this.styledTextAreaFX = styledTextAreaFX;
-        /*onMousePress();
-        onMouseReleased();*/
-    }
-
-    //todo remove
-    private void onMousePress() {
-        super.setOnMousePressed((mouseEvent) -> {
-            log.info("root bounds: " + this.getBoundsInParent());
-            styledTextAreaFX.getCaret().moveCaret(mouseEvent.getX(), mouseEvent.getY(), this);
-        });
-    }
-
-    //todo remove
-    private void onMouseReleased() {
-        super.setOnMouseReleased((mouseEvent) -> {
-            styledTextAreaFX.selectText(mouseEvent.getX(), mouseEvent.getY(), this);
-        });
     }
 
     public void calculatePaths() {
@@ -92,6 +75,16 @@ public class TextExtended extends Text {
         /*styledTextAreaFX.getTextFlowPane().getChildren().add(this);
         styledTextAreaFX.getTextFlowPane().getChildren().add(redBorder);*/
         this.styledTextAreaFX = styledTextAreaFX;
+    }
+
+    public MousePosition getLocalMousePosition(double globalX, double globalY){
+        Bounds textBoundsInParagraph = getBoundsInParent();
+        Bounds textBoundsInAllParagraphsFlowPane = getParagraph().localToParent(textBoundsInParagraph);
+        return new MousePosition(globalX - textBoundsInAllParagraphsFlowPane.getMinX(), globalY - textBoundsInAllParagraphsFlowPane.getMinY());
+    }
+
+    public Paragraph getParagraph() {
+        return (Paragraph) this.getParent();
     }
 
     public List<Path> getPaths() {
