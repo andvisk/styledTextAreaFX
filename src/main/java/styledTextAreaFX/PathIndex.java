@@ -24,6 +24,16 @@ public class PathIndex {
         }
     }
 
+    //getting last path
+    public PathIndex(TextExtended text) {
+        this.text = text;
+        double xToReturn = -1;
+        List<Path> paths = text.getPaths();
+        nearestIndex = text.getText().length();
+        Path path = paths.get(paths.size() - 1);
+        nearestPathX = path.getBoundsInParent().getMinX() + path.getBoundsInLocal().getWidth();
+    }
+
     private int getNearestPathIndex(TextExtended text, double x) {
         double closestX = -1;
         List<Path> paths = text.getPaths();

@@ -13,12 +13,14 @@ public class TextSelection {
     private Consumer consumer;
 
 
-    public TextSelection(List<Paragraph> allParagraphs, PathIndex nearestPathIndex1, PathIndex nearestPathIndex2) {
+    public TextSelection() {
+    }
 
+    public void selectionChange(List<Paragraph> allParagraphs, PathIndex nearestPathIndex1, PathIndex nearestPathIndex2) {
         this.allParagraphs = allParagraphs;
 
         //if any selection. Object also provides deselection function, in this case both PathIndex is null
-        if(nearestPathIndex1 != null && nearestPathIndex2 != null) {
+        if (nearestPathIndex1 != null && nearestPathIndex2 != null) {
             Paragraph startParagraph = null;
             Paragraph endParagraph = null;
 
@@ -65,10 +67,11 @@ public class TextSelection {
     }
 
     public void deselectTexts() {
-        allParagraphs.stream().flatMap(p -> p.getListText().stream()).forEach(p -> {
-            p.setSelectionStart(0);
-            p.setSelectionEnd(0);
-        });
+        if (allParagraphs != null)
+            allParagraphs.stream().flatMap(p -> p.getListText().stream()).forEach(p -> {
+                p.setSelectionStart(0);
+                p.setSelectionEnd(0);
+            });
     }
 
     public void selectTexts() {

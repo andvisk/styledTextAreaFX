@@ -10,6 +10,8 @@ import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -38,8 +40,7 @@ public class StyledTextAreaFX {
     private Caret caret;
     private Group rootGroup;
 
-    private boolean mouseIsDown = false;
-
+    private TextSelection textSelection;
     private List<Paragraph> paragraphList;
 
     private ExecutorService selectionExecutorService;
@@ -47,6 +48,8 @@ public class StyledTextAreaFX {
     public StyledTextAreaFX(StackPane rootElement) {
 
         startExecutorService();
+
+        textSelection = new TextSelection();
 
         this.rootElement = rootElement;
 
@@ -65,9 +68,9 @@ public class StyledTextAreaFX {
 
         paragraphList = new ArrayList<>();
 
-        onMousePress();
-        onMouseReleased();
-        setOnMouseMoved();
+        rootElement.addEventFilter(MouseEvent.ANY, e -> registerMouseEvents(e));
+
+
     }
 
     public void startExecutorService() {
@@ -86,35 +89,40 @@ public class StyledTextAreaFX {
         }
     }
 
-    private void onMousePress() {
-        scrollPane.setOnMousePressed((mouseEvent) -> {
-            mouseIsDown = true;
+    private void registerMouseEvents(MouseEvent mouseEvent) {
+        if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
             TextExtended text = getTextByCoord(mouseEvent.getX(), mouseEvent.getY());
             if (text != null) {
                 log.info("selected text: " + text.toString());
+                textSelection.deselectTexts();
                 MousePosition mousePositionLocal = text.getLocalMousePosition(mouseEvent.getX(), mouseEvent.getY());
                 caret.moveCaret(mousePositionLocal.x(), mousePositionLocal.y(), text);
+            } else {
+                textSelection.deselectTexts();
             }
-        });
-    }
+        }
+        if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_CLICKED)) {
+            TextExtended text = getTextByCoord(mouseEvent.getX(), mouseEvent.getY());
+            if (text != null)
+                if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
+                    if (mouseEvent.getClickCount() == 3) {
+                        log.info("Triple clicked");
+                    } else if (mouseEvent.getClickCount() == 2) {
+                        log.info("Double clicked");
+                        textSelection.deselectTexts();
+                        PathIndex startPathIndex = new PathIndex(text, 0);
+                        PathIndex endPathIndex = new PathIndex(text);
+                        textSelection.selectionChange(paragraphList, startPathIndex, endPathIndex);
+                        textSelection.selectTexts();
+                    }
 
-    private void onMouseReleased() {
-        rootElement.setOnMouseReleased((mouseEvent) -> {
-            mouseIsDown = false;
-        });
-    }
+                }
+        }
 
-    private void setOnMouseMoved() {
-        rootElement.setOnMouseMoved((mouseEvent) -> {
-            log.info("mouse is "+((mouseIsDown)?"down":"released")+", move " + System.currentTimeMillis());
-            if (mouseIsDown)
-                mouseIsMovingWithoutRelease(mouseEvent.getX(), mouseEvent.getY());
-        });
-        rootElement.setOnMouseDragged((mouseEvent) -> {
-            log.info("mouse is "+((mouseIsDown)?"down":"released")+", move " + System.currentTimeMillis());
-            if (mouseIsDown)
-                mouseIsMovingWithoutRelease(mouseEvent.getX(), mouseEvent.getY());
-        });
+        if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_DRAGGED)) {
+            log.info("mouse drag " + System.currentTimeMillis());
+            mouseIsMovingWithoutRelease(mouseEvent.getX(), mouseEvent.getY());
+        }
     }
 
     public void addParagraphs(Paragraph... paragraphs) {
@@ -163,7 +171,8 @@ public class StyledTextAreaFX {
                 PathIndex nearestPathIndex = new PathIndex(text, mousePositionLocal.x());
                 // if mouse release is not the same index or different text
                 if (nearestPathIndex.getNearestIndex() != caret.getNearestPathIndex().getNearestIndex() || caret.getiAmOnText().getUuid().compareTo(text.getUuid()) != 0) {
-                    textSelection = new TextSelection(paragraphList, nearestPathIndex, caret.getNearestPathIndex());
+                    textSelection = new TextSelection();
+                    textSelection.selectionChange(paragraphList, nearestPathIndex, caret.getNearestPathIndex());
 
                     textSelection.setConsumer(p -> ((TextSelection) p).selectTexts());
                     log.info("mouse release --------------------------------- ");
@@ -174,19 +183,21 @@ public class StyledTextAreaFX {
                 } else {
                     //the same text, the same index
                     if (nearestPathIndex.getNearestIndex() == caret.getNearestPathIndex().getNearestIndex() || caret.getiAmOnText().getUuid().compareTo(text.getUuid()) == 0) {
-                        textSelection = new TextSelection(paragraphList, null, null);
+                        textSelection = new TextSelection();
+                        textSelection.selectionChange(paragraphList, null, null);
                         textSelection.setConsumer(p -> ((TextSelection) p).deselectTexts());
                     }
                 }
             } else {
-                textSelection = new TextSelection(paragraphList, null, null);
+                textSelection = new TextSelection();
+                textSelection.selectionChange(paragraphList, null, null);
                 textSelection.setConsumer(p -> ((TextSelection) p).deselectTexts()); // mouse release out of text area //todo select by nearest text
             }
             return textSelection;
         });
 
         task.setOnSucceeded(e -> {
-            TextSelection textSelection = task.getValue();
+            textSelection = task.getValue();
             if (textSelection != null)
                 textSelection.getConsumer().accept(textSelection);
             log.info("mouse is down, move, success " + System.currentTimeMillis());
