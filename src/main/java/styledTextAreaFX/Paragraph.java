@@ -28,14 +28,16 @@ public class Paragraph extends FlowPane {
         textOverlay.getChildren().add(this);
     }
 
-    public void addTexts(TextExtended... texts) {
+    public void addWords(Word... words) {
         int lastTextIndex = -1;
         if(listText.size() > 0){
             lastTextIndex = listText.size() - 1;
         }
-        for(TextExtended text:texts){
-            ++lastTextIndex;
-            listText.add(text.addMe(lastTextIndex));
+        for(Word word:words) {
+            for (TextExtended text : word.getTextList()) {
+                ++lastTextIndex;
+                listText.add(text.addMe(lastTextIndex));
+            }
         }
     }
 

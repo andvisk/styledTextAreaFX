@@ -40,36 +40,36 @@ public class ControllerMain {
     private void addText(StyledTextAreaFX textArea){
         Paragraph paragraph = new Paragraph();
 
-        paragraph.addTexts(new TextExtended("Pirmas", "Verdana", 40, Color.CHOCOLATE, textArea));
-        paragraph.addTexts(new TextExtended(" ", "Verdana", 40, Color.CHOCOLATE, textArea));
-        paragraph.addTexts(new TextExtended("tekstas", "Verdana", 40, Color.CHOCOLATE, textArea));
-        paragraph.addTexts(new TextExtended(" ", "Verdana", 40, Color.CHOCOLATE, textArea));
-        paragraph.addTexts(new TextExtended("Antras", "Verdana", 18, Color.CHOCOLATE, textArea));
-        paragraph.addTexts(new TextExtended(" ", "Verdana", 18, Color.CHOCOLATE, textArea));
-        paragraph.addTexts(new TextExtended("tekstas", "Verdana", 18, Color.CHOCOLATE, textArea));
-        paragraph.addTexts(new TextExtended(" ", "Verdana", 18, Color.CHOCOLATE, textArea));
-        paragraph.addTexts(new TextExtended("Trecias", "Verdana", 18, Color.CHOCOLATE, textArea));
-        paragraph.addTexts(new TextExtended(" ", "Verdana", 18, Color.CHOCOLATE, textArea));
-        paragraph.addTexts(new TextExtended("tekstas", "Verdana", 18, Color.CHOCOLATE, textArea));
-        paragraph.addTexts(new TextExtended(" ", "Verdana", 18, Color.CHOCOLATE, textArea));
-        paragraph.addTexts(new TextExtended("Ketvirtas", "Verdana", 18, Color.CHOCOLATE, textArea));
-        paragraph.addTexts(new TextExtended(" ", "Verdana", 18, Color.CHOCOLATE, textArea));
-        paragraph.addTexts(new TextExtended("tekstas", "Verdana", 18, Color.CHOCOLATE, textArea));
-        paragraph.addTexts(new TextExtended(" ", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph.addWords(new Word("Pirmas", "Verdana", 40, Color.CHOCOLATE, textArea));
+        paragraph.addWords(new Word(" ", "Verdana", 40, Color.CHOCOLATE, textArea));
+        paragraph.addWords(new Word("tekstas", "Verdana", 40, Color.CHOCOLATE, textArea));
+        paragraph.addWords(new Word(" ", "Verdana", 40, Color.CHOCOLATE, textArea));
+        paragraph.addWords(new Word("Antras", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph.addWords(new Word(" ", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph.addWords(new Word("tekstas", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph.addWords(new Word(" ", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph.addWords(new Word("Trecias", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph.addWords(new Word(" ", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph.addWords(new Word("tekstas", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph.addWords(new Word(" ", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph.addWords(new Word("Ketvirtas", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph.addWords(new Word(" ", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph.addWords(new Word("tekstas", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph.addWords(new Word(" ", "Verdana", 18, Color.CHOCOLATE, textArea));
 
         Paragraph paragraph2 = new Paragraph();
-        paragraph2.addTexts(new TextExtended("Penktas", "Verdana", 18, Color.CHOCOLATE, textArea));
-        paragraph2.addTexts(new TextExtended(" ", "Verdana", 18, Color.CHOCOLATE, textArea));
-        paragraph2.addTexts(new TextExtended("tekstas", "Verdana", 18, Color.CHOCOLATE, textArea));
-        paragraph2.addTexts(new TextExtended(" ", "Verdana", 18, Color.CHOCOLATE, textArea));
-        paragraph2.addTexts(new TextExtended("Sestas", "Verdana", 18, Color.CHOCOLATE, textArea));
-        paragraph2.addTexts(new TextExtended(" ", "Verdana", 18, Color.CHOCOLATE, textArea));
-        paragraph2.addTexts(new TextExtended("tekstas", "Verdana", 18, Color.CHOCOLATE, textArea));
-        paragraph2.addTexts(new TextExtended(" ", "Verdana", 18, Color.CHOCOLATE, textArea));
-        paragraph2.addTexts(new TextExtended("Septintas", "Verdana", 18, Color.CHOCOLATE, textArea));
-        paragraph2.addTexts(new TextExtended(" ", "Verdana", 18, Color.CHOCOLATE, textArea));
-        paragraph2.addTexts(new TextExtended("tekstas", "Verdana", 18, Color.CHOCOLATE, textArea));
-        paragraph2.addTexts(new TextExtended(" ", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph2.addWords(new Word("Penktas", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph2.addWords(new Word(" ", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph2.addWords(new Word("tekstas", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph2.addWords(new Word(" ", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph2.addWords(new Word("Sestas", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph2.addWords(new Word(" ", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph2.addWords(new Word("tekstas", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph2.addWords(new Word(" ", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph2.addWords(new Word("Septintas", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph2.addWords(new Word(" ", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph2.addWords(new Word("tekstas", "Verdana", 18, Color.CHOCOLATE, textArea));
+        paragraph2.addWords(new Word(" ", "Verdana", 18, Color.CHOCOLATE, textArea));
 
         textArea.addParagraphs(paragraph, paragraph2);
     }

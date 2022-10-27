@@ -107,8 +107,16 @@ public class StyledTextAreaFX {
                 if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
                     if (mouseEvent.getClickCount() == 3) {
                         log.info("Triple clicked");
+
+                        //todo select row
+
+                        aaa
+
                     } else if (mouseEvent.getClickCount() == 2) {
                         log.info("Double clicked");
+
+                        //todo select word
+
                         textSelection.deselectTexts();
                         PathIndex startPathIndex = new PathIndex(text, 0);
                         PathIndex endPathIndex = new PathIndex(text);
