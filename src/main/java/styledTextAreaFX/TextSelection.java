@@ -2,6 +2,7 @@ package styledTextAreaFX;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class TextSelection {
     private List<Paragraph> allParagraphs;
@@ -9,65 +10,69 @@ public class TextSelection {
     private List<TextExtended> selectedTextList;
     private PathIndex startSelection;
     private PathIndex endSelection;
+    private Consumer consumer;
 
 
     public TextSelection(List<Paragraph> allParagraphs, PathIndex nearestPathIndex1, PathIndex nearestPathIndex2) {
 
         this.allParagraphs = allParagraphs;
-        Paragraph startParagraph = null;
-        Paragraph endParagraph = null;
 
-        //if first paragraph is above the second
-        if (nearestPathIndex1.getText().getParagraph().getBoundsInParent().getMinY()
-                < nearestPathIndex2.getText().getParagraph().getBoundsInParent().getMinY()) {
-            startParagraph = nearestPathIndex1.getText().getParagraph();
-            endParagraph = nearestPathIndex2.getText().getParagraph();
-            startSelection = nearestPathIndex1;
-            endSelection = nearestPathIndex2;
-        } else {
-            startParagraph = nearestPathIndex2.getText().getParagraph();
-            endParagraph = nearestPathIndex1.getText().getParagraph();
-            startSelection = nearestPathIndex2;
-            endSelection = nearestPathIndex1;
-        }
+        //if any selection. Object also provides deselection function, in this case both PathIndex is null
+        if(nearestPathIndex1 != null && nearestPathIndex2 != null) {
+            Paragraph startParagraph = null;
+            Paragraph endParagraph = null;
 
-        //same paragraph
-        if (startParagraph.getUuid().compareTo(endParagraph.getUuid()) == 0) {
-            //same text
-            if (nearestPathIndex1.getText().getUuid().compareTo(nearestPathIndex2.getText().getUuid())==0) {
-                if(nearestPathIndex1.getNearestIndex() < nearestPathIndex2.getNearestIndex()){
-                    startSelection = nearestPathIndex1;
-                    endSelection = nearestPathIndex2;
-                }else{
-                    startSelection = nearestPathIndex2;
-                    endSelection = nearestPathIndex1;
-                }
+            //if first paragraph is above the second
+            if (nearestPathIndex1.getText().getParagraph().getBoundsInParent().getMinY()
+                    < nearestPathIndex2.getText().getParagraph().getBoundsInParent().getMinY()) {
+                startParagraph = nearestPathIndex1.getText().getParagraph();
+                endParagraph = nearestPathIndex2.getText().getParagraph();
+                startSelection = nearestPathIndex1;
+                endSelection = nearestPathIndex2;
             } else {
-                //compare text indexes in paragraph
-                if(nearestPathIndex1.getText().getIndexInParagraph() < nearestPathIndex2.getText().getIndexInParagraph()){
-                    startSelection = nearestPathIndex1;
-                    endSelection = nearestPathIndex2;
-                }else{
-                    startSelection = nearestPathIndex2;
-                    endSelection = nearestPathIndex1;
-                }
+                startParagraph = nearestPathIndex2.getText().getParagraph();
+                endParagraph = nearestPathIndex1.getText().getParagraph();
+                startSelection = nearestPathIndex2;
+                endSelection = nearestPathIndex1;
             }
-        } // else we already set by paragraphs Y coord
 
-        collectSelectedParagraphs(allParagraphs, startParagraph, endParagraph);
-        collectSelectedTexts();
-        deselectTexts(allParagraphs);
-        selectTexts();
+            //same paragraph
+            if (startParagraph.getUuid().compareTo(endParagraph.getUuid()) == 0) {
+                //same text
+                if (nearestPathIndex1.getText().getUuid().compareTo(nearestPathIndex2.getText().getUuid()) == 0) {
+                    if (nearestPathIndex1.getNearestIndex() < nearestPathIndex2.getNearestIndex()) {
+                        startSelection = nearestPathIndex1;
+                        endSelection = nearestPathIndex2;
+                    } else {
+                        startSelection = nearestPathIndex2;
+                        endSelection = nearestPathIndex1;
+                    }
+                } else {
+                    //compare text indexes in paragraph
+                    if (nearestPathIndex1.getText().getIndexInParagraph() < nearestPathIndex2.getText().getIndexInParagraph()) {
+                        startSelection = nearestPathIndex1;
+                        endSelection = nearestPathIndex2;
+                    } else {
+                        startSelection = nearestPathIndex2;
+                        endSelection = nearestPathIndex1;
+                    }
+                }
+            } // else we already set by paragraphs Y coord
+
+            collectSelectedParagraphs(allParagraphs, startParagraph, endParagraph);
+            collectSelectedTexts();
+        }
     }
 
-    public static void deselectTexts(List<Paragraph> allParagraphs) {
+    public void deselectTexts() {
         allParagraphs.stream().flatMap(p -> p.getListText().stream()).forEach(p -> {
             p.setSelectionStart(0);
             p.setSelectionEnd(0);
         });
     }
 
-    private void selectTexts() {
+    public void selectTexts() {
+        deselectTexts();
         for (int i = 0; i < selectedTextList.size(); i++) {
             TextExtended text = selectedTextList.get(i);
 
@@ -128,5 +133,13 @@ public class TextSelection {
 
     public List<TextExtended> getSelectedTextList() {
         return selectedTextList;
+    }
+
+    public Consumer getConsumer() {
+        return consumer;
+    }
+
+    public void setConsumer(Consumer consumer) {
+        this.consumer = consumer;
     }
 }

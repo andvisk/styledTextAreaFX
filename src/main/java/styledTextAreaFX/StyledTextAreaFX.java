@@ -1,5 +1,6 @@
 package styledTextAreaFX;
 
+import javafx.concurrent.Task;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -7,6 +8,8 @@ import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -17,6 +20,7 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.*;
 
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
@@ -34,9 +38,15 @@ public class StyledTextAreaFX {
     private Caret caret;
     private Group rootGroup;
 
+    private boolean mouseIsDown = false;
+
     private List<Paragraph> paragraphList;
 
+    private ExecutorService selectionExecutorService;
+
     public StyledTextAreaFX(StackPane rootElement) {
+
+        startExecutorService();
 
         this.rootElement = rootElement;
 
@@ -57,10 +67,28 @@ public class StyledTextAreaFX {
 
         onMousePress();
         onMouseReleased();
+        setOnMouseMoved();
+    }
+
+    public void startExecutorService() {
+
+        if (selectionExecutorService == null || selectionExecutorService.isShutdown() || selectionExecutorService.isTerminated()) {
+            int poolSize = 1;
+            int queueSize = 2;
+            RejectedExecutionHandler handler = new ThreadPoolExecutor.DiscardOldestPolicy();
+
+            selectionExecutorService = new ThreadPoolExecutor(poolSize, poolSize,
+                    0L, TimeUnit.MILLISECONDS,
+                    new LinkedBlockingQueue<>(queueSize),
+                    handler);
+
+
+        }
     }
 
     private void onMousePress() {
         scrollPane.setOnMousePressed((mouseEvent) -> {
+            mouseIsDown = true;
             TextExtended text = getTextByCoord(mouseEvent.getX(), mouseEvent.getY());
             if (text != null) {
                 log.info("selected text: " + text.toString());
@@ -72,27 +100,20 @@ public class StyledTextAreaFX {
 
     private void onMouseReleased() {
         rootElement.setOnMouseReleased((mouseEvent) -> {
-            TextExtended text = getTextByCoord(mouseEvent.getX(), mouseEvent.getY());
-            if (text != null) {
-                MousePosition mousePositionLocal = text.getLocalMousePosition(mouseEvent.getX(), mouseEvent.getY());
-                PathIndex nearestPathIndex = new PathIndex(text, mousePositionLocal.x());
-                // if mouse release is not the same index or different text
-                if (nearestPathIndex.getNearestIndex() != caret.getNearestPathIndex().getNearestIndex() || caret.getiAmOnText().getUuid().compareTo(text.getUuid()) != 0) {
-                    TextSelection textSelection = new TextSelection(paragraphList, nearestPathIndex, caret.getNearestPathIndex());
-                    log.info("mouse release --------------------------------- ");
-                    for(TextExtended textSel:textSelection.getSelectedTextList()){
-                        log.info("mouse release, selected text: " + textSel.toString());
-                    }
-                    log.info("mouse release --------------------------------- ");
-                }else{
-                    //the same text, the same index
-                    if (nearestPathIndex.getNearestIndex() == caret.getNearestPathIndex().getNearestIndex() || caret.getiAmOnText().getUuid().compareTo(text.getUuid()) == 0) {
-                        TextSelection.deselectTexts(paragraphList);
-                    }
-                }
-            }else{
-                TextSelection.deselectTexts(paragraphList); // mouse release out of text area //todo select by nearest text
-            }
+            mouseIsDown = false;
+        });
+    }
+
+    private void setOnMouseMoved() {
+        rootElement.setOnMouseMoved((mouseEvent) -> {
+            log.info("mouse is "+((mouseIsDown)?"down":"released")+", move " + System.currentTimeMillis());
+            if (mouseIsDown)
+                mouseIsMovingWithoutRelease(mouseEvent.getX(), mouseEvent.getY());
+        });
+        rootElement.setOnMouseDragged((mouseEvent) -> {
+            log.info("mouse is "+((mouseIsDown)?"down":"released")+", move " + System.currentTimeMillis());
+            if (mouseIsDown)
+                mouseIsMovingWithoutRelease(mouseEvent.getX(), mouseEvent.getY());
         });
     }
 
@@ -103,7 +124,7 @@ public class StyledTextAreaFX {
 
     private TextExtended getTextByCoord(double mouseEventX, double mouseEventY) {
         Paragraph paragraph = getParagraphByCoord(mouseEventX, mouseEventY);
-        if(paragraph == null)
+        if (paragraph == null)
             return null;
         TextExtended text = paragraph.getListText().stream().filter(p -> {
             Bounds textBoundsInParagraph = p.getBoundsInParent();
@@ -133,12 +154,61 @@ public class StyledTextAreaFX {
         return false;
     }
 
-    //todo
-    public void selectText(double textX, double textY, TextExtended text) {
+    private void mouseIsMovingWithoutRelease(double mouseGlobalX, double mouseGlobalY) {
+        Task<TextSelection> task = JFxTasksUtils.createTask(() -> {
+            TextSelection textSelection = null;
+            TextExtended text = getTextByCoord(mouseGlobalX, mouseGlobalY);
+            if (text != null) {
+                MousePosition mousePositionLocal = text.getLocalMousePosition(mouseGlobalX, mouseGlobalY);
+                PathIndex nearestPathIndex = new PathIndex(text, mousePositionLocal.x());
+                // if mouse release is not the same index or different text
+                if (nearestPathIndex.getNearestIndex() != caret.getNearestPathIndex().getNearestIndex() || caret.getiAmOnText().getUuid().compareTo(text.getUuid()) != 0) {
+                    textSelection = new TextSelection(paragraphList, nearestPathIndex, caret.getNearestPathIndex());
 
+                    textSelection.setConsumer(p -> ((TextSelection) p).selectTexts());
+                    log.info("mouse release --------------------------------- ");
+                    for (TextExtended textSel : textSelection.getSelectedTextList()) {
+                        log.info("mouse release, selected text: " + textSel.toString());
+                    }
+                    log.info("mouse release --------------------------------- ");
+                } else {
+                    //the same text, the same index
+                    if (nearestPathIndex.getNearestIndex() == caret.getNearestPathIndex().getNearestIndex() || caret.getiAmOnText().getUuid().compareTo(text.getUuid()) == 0) {
+                        textSelection = new TextSelection(paragraphList, null, null);
+                        textSelection.setConsumer(p -> ((TextSelection) p).deselectTexts());
+                    }
+                }
+            } else {
+                textSelection = new TextSelection(paragraphList, null, null);
+                textSelection.setConsumer(p -> ((TextSelection) p).deselectTexts()); // mouse release out of text area //todo select by nearest text
+            }
+            return textSelection;
+        });
+
+        task.setOnSucceeded(e -> {
+            TextSelection textSelection = task.getValue();
+            if (textSelection != null)
+                textSelection.getConsumer().accept(textSelection);
+            log.info("mouse is down, move, success " + System.currentTimeMillis());
+        });
+        task.setOnFailed(e -> {
+            log.error(task.getException().getMessage(), task.getException());
+        });
+        if (!selectionExecutorService.isShutdown())
+            selectionExecutorService.execute(task);
     }
 
     public Caret getCaret() {
         return caret;
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        try {
+            if (!selectionExecutorService.isShutdown())
+                selectionExecutorService.shutdown();
+        } finally {
+            super.finalize();
+        }
     }
 }
