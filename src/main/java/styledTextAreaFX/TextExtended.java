@@ -24,12 +24,14 @@ import java.util.UUID;
 public class TextExtended extends Text {
 
     private UUID uuid;
+    private int indexInParagraph;
     private Logger log = LogManager.getLogger(this.getClass());
     private StyledTextAreaFX styledTextAreaFX;
     private List<Path> paths;
     private String font;
     private double fontSize;
     private Color fillColor;
+    private Interval selection;
 
     public TextExtended(String text, String font, double fontSize, Color fillColor, StyledTextAreaFX styledTextAreaFX) {
         super(text);
@@ -56,9 +58,9 @@ public class TextExtended extends Text {
         paths = new ArrayList<>();
     }
 
-    //todo remove
-    public void addMe(Paragraph paragraph) {
-
+    public TextExtended addMe(int myIndex) {
+        indexInParagraph = myIndex;
+        return this;
         /*final Rectangle redBorder = new Rectangle(0, 0, Color.TRANSPARENT);
         redBorder.setStroke(Color.RED);
         redBorder.setManaged(false);
@@ -79,7 +81,13 @@ public class TextExtended extends Text {
         });*/
         /*styledTextAreaFX.getTextFlowPane().getChildren().add(this);
         styledTextAreaFX.getTextFlowPane().getChildren().add(redBorder);*/
-        this.styledTextAreaFX = styledTextAreaFX;
+
+    }
+
+    public void selectText(int indexStart, int indexStop){
+        selection = new Interval(indexStart, indexStop);
+        this.setSelectionStart(indexStart);
+        this.setSelectionEnd(indexStop);
     }
 
     public MousePosition getLocalMousePosition(double globalX, double globalY){
@@ -90,6 +98,14 @@ public class TextExtended extends Text {
 
     public Paragraph getParagraph() {
         return (Paragraph) this.getParent();
+    }
+
+    public int getIndexInParagraph() {
+        return indexInParagraph;
+    }
+
+    public void setIndexInParagraph(int indexInParagraph) {
+        this.indexInParagraph = indexInParagraph;
     }
 
     public List<Path> getPaths() {

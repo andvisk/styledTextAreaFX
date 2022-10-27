@@ -29,7 +29,14 @@ public class Paragraph extends FlowPane {
     }
 
     public void addTexts(TextExtended... texts) {
-        listText.addAll(Arrays.asList(texts));
+        int lastTextIndex = -1;
+        if(listText.size() > 0){
+            lastTextIndex = listText.size() - 1;
+        }
+        for(TextExtended text:texts){
+            ++lastTextIndex;
+            listText.add(text.addMe(lastTextIndex));
+        }
     }
 
     public List<TextExtended> getListText() {

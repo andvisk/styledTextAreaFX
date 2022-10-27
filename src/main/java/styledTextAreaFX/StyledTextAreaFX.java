@@ -79,8 +79,19 @@ public class StyledTextAreaFX {
                 // if mouse release is not the same index or different text
                 if (nearestPathIndex.getNearestIndex() != caret.getNearestPathIndex().getNearestIndex() || caret.getiAmOnText().getUuid().compareTo(text.getUuid()) != 0) {
                     TextSelection textSelection = new TextSelection(paragraphList, nearestPathIndex, caret.getNearestPathIndex());
-                    log.info("mouse release, selecting text: " + text.toString() + ", len=" + text.getText().length() + ", selection index " + nearestPathIndex.getNearestIndex());
+                    log.info("mouse release --------------------------------- ");
+                    for(TextExtended textSel:textSelection.getSelectedTextList()){
+                        log.info("mouse release, selected text: " + textSel.toString());
+                    }
+                    log.info("mouse release --------------------------------- ");
+                }else{
+                    //the same text, the same index
+                    if (nearestPathIndex.getNearestIndex() == caret.getNearestPathIndex().getNearestIndex() || caret.getiAmOnText().getUuid().compareTo(text.getUuid()) == 0) {
+                        TextSelection.deselectTexts(paragraphList);
+                    }
                 }
+            }else{
+                TextSelection.deselectTexts(paragraphList); // mouse release out of text area //todo select by nearest text
             }
         });
     }
@@ -92,6 +103,8 @@ public class StyledTextAreaFX {
 
     private TextExtended getTextByCoord(double mouseEventX, double mouseEventY) {
         Paragraph paragraph = getParagraphByCoord(mouseEventX, mouseEventY);
+        if(paragraph == null)
+            return null;
         TextExtended text = paragraph.getListText().stream().filter(p -> {
             Bounds textBoundsInParagraph = p.getBoundsInParent();
             Bounds textBoundsInAllParagraphsFlowPane = paragraph.localToParent(textBoundsInParagraph);
