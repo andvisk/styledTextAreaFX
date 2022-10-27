@@ -22,6 +22,7 @@ public class Caret {
     private int stackPaneWidth = 1;
     private AnimationTimer animationTimer;
     private TextExtended iAmOnText;
+    private PathIndex nearestPathIndex;
 
     public Caret(Group caretOverlay) {
 
@@ -77,7 +78,7 @@ public class Caret {
         double posX = textBounds.getMinX() + paragraphBounds.getMinX() + textAreaBounds.getMinX();
         double posY = textBounds.getMinY() + paragraphBounds.getMinY() + textAreaBounds.getMinY();
 
-        PathIndex nearestPathIndex = new PathIndex(text, textX);
+        nearestPathIndex = new PathIndex(text, textX);
         double relocateX = posX + nearestPathIndex.getNearestPathX();
 
         if (relocateX < 0) {
@@ -100,8 +101,8 @@ public class Caret {
         return iAmOnText;
     }
 
-    public Line getLine() {
-        return line;
+    public PathIndex getNearestPathIndex() {
+        return nearestPathIndex;
     }
 
     public StackPane getStackPane() {

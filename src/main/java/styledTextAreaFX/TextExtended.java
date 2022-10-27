@@ -19,9 +19,11 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public class TextExtended extends Text {
 
+    private UUID uuid;
     private Logger log = LogManager.getLogger(this.getClass());
     private StyledTextAreaFX styledTextAreaFX;
     private List<Path> paths;
@@ -31,12 +33,14 @@ public class TextExtended extends Text {
 
     public TextExtended(String text, String font, double fontSize, Color fillColor, StyledTextAreaFX styledTextAreaFX) {
         super(text);
+        uuid = UUID.randomUUID();
         setFont(Font.font(font, fontSize));
         setFill(fillColor);
         this.font = font;
         this.fontSize = fontSize;
         this.fillColor = fillColor;
         this.styledTextAreaFX = styledTextAreaFX;
+
     }
 
     public void calculatePaths() {
@@ -52,6 +56,7 @@ public class TextExtended extends Text {
         paths = new ArrayList<>();
     }
 
+    //todo remove
     public void addMe(Paragraph paragraph) {
 
         /*final Rectangle redBorder = new Rectangle(0, 0, Color.TRANSPARENT);
@@ -94,8 +99,14 @@ public class TextExtended extends Text {
         return paths;
     }
 
+    public UUID getUuid() {
+        return uuid;
+    }
+
     @Override
     public String toString() {
         return "TextExtended{" + this.getText() + "}";
     }
+
+
 }

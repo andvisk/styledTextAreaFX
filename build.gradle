@@ -22,7 +22,7 @@ javafx {
 project.afterEvaluate{
     println '=========================='
     project.tasks.withType(AbstractCompile, {
-        it.options.classpath = ''
+        //it.options.classpath = ''
     })
     def containerPrefix = 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/'
     project.eclipse.classpath{

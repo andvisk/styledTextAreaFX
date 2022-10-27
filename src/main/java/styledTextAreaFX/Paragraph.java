@@ -8,13 +8,16 @@ import javafx.scene.layout.FlowPane;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class Paragraph extends FlowPane {
 
+    private UUID uuid;
     private List<TextExtended> listText;
 
     public Paragraph() {
+        uuid = UUID.randomUUID();
         rowValignmentProperty().set(VPos.BASELINE);
         listText = new ArrayList<>();
     }
@@ -31,6 +34,10 @@ public class Paragraph extends FlowPane {
 
     public List<TextExtended> getListText() {
         return listText;
+    }
+
+    public UUID getUuid() {
+        return uuid;
     }
 
     @Override

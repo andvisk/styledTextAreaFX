@@ -74,8 +74,13 @@ public class StyledTextAreaFX {
         rootElement.setOnMouseReleased((mouseEvent) -> {
             TextExtended text = getTextByCoord(mouseEvent.getX(), mouseEvent.getY());
             if (text != null) {
-                log.info("mouse release text: " + text.toString());
-
+                MousePosition mousePositionLocal = text.getLocalMousePosition(mouseEvent.getX(), mouseEvent.getY());
+                PathIndex nearestPathIndex = new PathIndex(text, mousePositionLocal.x());
+                // if mouse release is not the same index or different text
+                if (nearestPathIndex.getNearestIndex() != caret.getNearestPathIndex().getNearestIndex() || caret.getiAmOnText().getUuid().compareTo(text.getUuid()) != 0) {
+                    TextSelection textSelection = new TextSelection(paragraphList, nearestPathIndex, caret.getNearestPathIndex());
+                    log.info("mouse release, selecting text: " + text.toString() + ", len=" + text.getText().length() + ", selection index " + nearestPathIndex.getNearestIndex());
+                }
             }
         });
     }

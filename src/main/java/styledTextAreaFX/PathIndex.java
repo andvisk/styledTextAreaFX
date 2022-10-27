@@ -9,8 +9,10 @@ public class PathIndex {
     private double nearestPathX;
     private Path nearestPath;
     private int nearestIndex;
+    private TextExtended text;
 
     public PathIndex(TextExtended text, double x) {
+        this.text = text;
         double xToReturn = -1;
         List<Path> paths = text.getPaths();
         nearestIndex = getNearestPathIndex(text, x);
@@ -53,5 +55,9 @@ public class PathIndex {
 
     public int getNearestIndex() {
         return nearestIndex;
+    }
+
+    public TextExtended getText() {
+        return text;
     }
 }
