@@ -12,7 +12,7 @@ public class Word {
 
     public Word(String word, String font, double size, Color color, StyledTextAreaFX styledTextAreaFX) {
         textList = new ArrayList<>();
-        textList.add(new TextExtended(word, font, size, color, styledTextAreaFX));
+        textList.add(new TextExtended(this, word, font, size, color, styledTextAreaFX));
     }
 
     public Word(List<TextExtended> textList) {

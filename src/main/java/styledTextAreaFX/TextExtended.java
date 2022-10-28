@@ -32,8 +32,9 @@ public class TextExtended extends Text {
     private double fontSize;
     private Color fillColor;
     private Interval selection;
+    private Word word;
 
-    public TextExtended(String text, String font, double fontSize, Color fillColor, StyledTextAreaFX styledTextAreaFX) {
+    public TextExtended(Word word, String text, String font, double fontSize, Color fillColor, StyledTextAreaFX styledTextAreaFX) {
         super(text);
         uuid = UUID.randomUUID();
         setFont(Font.font(font, fontSize));

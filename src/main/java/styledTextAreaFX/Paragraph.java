@@ -4,6 +4,7 @@ import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,12 +29,31 @@ public class Paragraph extends FlowPane {
         textOverlay.getChildren().add(this);
     }
 
-    public void addWords(Word... words) {
+    public void addString(String string, String font, double size, Color color, StyledTextAreaFX styledTextAreaFX) {
+        List<String> splits = Arrays.asList(string.split(" ", -1));
+        List<String> splitsWithSpaces = new ArrayList<>();
+
+        for (String split : splits) {
+            if (split.length() > 0) {
+                splitsWithSpaces.add(split);
+                splitsWithSpaces.add(" ");
+            } else {
+                splitsWithSpaces.add(" ");
+            }
+        }
+
+        List<Word> words = splitsWithSpaces.stream().map(p ->
+                new Word(p, font, size, color, styledTextAreaFX)
+        ).toList();
+        addWords(words);
+    }
+
+    public void addWords(List<Word> words) {
         int lastTextIndex = -1;
-        if(listText.size() > 0){
+        if (listText.size() > 0) {
             lastTextIndex = listText.size() - 1;
         }
-        for(Word word:words) {
+        for (Word word : words) {
             for (TextExtended text : word.getTextList()) {
                 ++lastTextIndex;
                 listText.add(text.addMe(lastTextIndex));
@@ -52,7 +72,7 @@ public class Paragraph extends FlowPane {
     @Override
     public String toString() {
         return "Paragraph{" +
-                "listText=" + listText.stream().map(p->p.getText()).collect(Collectors.joining(";")) +
+                "listText=" + listText.stream().map(p -> p.getText()).collect(Collectors.joining(";")) +
                 '}';
     }
 }

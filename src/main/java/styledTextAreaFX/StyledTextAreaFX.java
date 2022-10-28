@@ -1,6 +1,8 @@
 package styledTextAreaFX;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.concurrent.Task;
+import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -26,6 +28,7 @@ import java.util.concurrent.*;
 
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
+import javafx.stage.WindowEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -45,7 +48,11 @@ public class StyledTextAreaFX {
 
     private ExecutorService selectionExecutorService;
 
-    public StyledTextAreaFX(StackPane rootElement) {
+    public StyledTextAreaFX(StackPane rootElement, ObjectProperty<EventHandler<WindowEvent>> onCloseRequestProperty) {
+
+        onCloseRequestProperty.addListener((ov, s1, s2)->{
+            shutDownSelectionExecutorService();
+        });
 
         startExecutorService();
 
@@ -110,12 +117,12 @@ public class StyledTextAreaFX {
 
                         //todo select row
 
-                        aaa
+
 
                     } else if (mouseEvent.getClickCount() == 2) {
                         log.info("Double clicked");
 
-                        //todo select word
+                        //todo select word, not textExtended
 
                         textSelection.deselectTexts();
                         PathIndex startPathIndex = new PathIndex(text, 0);
@@ -221,11 +228,17 @@ public class StyledTextAreaFX {
         return caret;
     }
 
+    public void shutDownSelectionExecutorService(){
+        log.info("shutdown");
+        if (!selectionExecutorService.isShutdown())
+            selectionExecutorService.shutdown();
+    }
+
     @Override
     protected void finalize() throws Throwable {
         try {
-            if (!selectionExecutorService.isShutdown())
-                selectionExecutorService.shutdown();
+            //log.info("object being destroyed");
+            //shutDownSelectionExecutorService();
         } finally {
             super.finalize();
         }

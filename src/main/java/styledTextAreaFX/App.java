@@ -1,6 +1,7 @@
 package styledTextAreaFX;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.StackPane;
@@ -16,6 +17,7 @@ public class App extends Application {
 
     private static Logger log = LogManager.getLogger(App.class);
 
+    private Stage primaryStage;
     private ControllerMain controller;
 
     public static void main(String[] args) {
@@ -30,6 +32,7 @@ public class App extends Application {
     public void start(Stage primaryStage) {
         try {
 
+            this.primaryStage = primaryStage;
             initPrimaryStage(primaryStage);
 
         } catch (Exception e) {
@@ -46,6 +49,10 @@ public class App extends Application {
         controller = new ControllerMain();
         controller.init(primaryStage, rootElement);
 
+    }
+
+    public void stop(){
+ int ii = 0;
     }
 
 }
