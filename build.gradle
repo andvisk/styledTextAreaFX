@@ -19,21 +19,6 @@ javafx {
     modules = ['javafx.controls']
 }
 
-project.afterEvaluate{
-    println '=========================='
-    project.tasks.withType(AbstractCompile, {
-        //it.options.classpath = ''
-    })
-    def containerPrefix = 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/'
-    project.eclipse.classpath{
-
-        containers.removeAll{it.startsWith(containerPrefix)}
-        containers.add(containerPrefix + 'JavaSE-17/')
-        println containers
-    }
-    println '=========================='
-}
-
 repositories {
     mavenCentral()
     jcenter()
@@ -43,8 +28,6 @@ dependencies {
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
     implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.17.1'
     implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.17.1'
-    implementation group: 'org.openpnp', name: 'opencv', version: '4.5.4-0'
-    implementation group: 'org.bytedeco', name: 'tesseract-platform', version: '5.0.1-1.5.7'
     implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
@@ -53,7 +36,7 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'styledTextAreaFX.App'
+    mainClass = 'styledtextareafx.App'
 }
 
 sourceSets {

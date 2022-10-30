@@ -1,4 +1,4 @@
-package styledTextAreaFX;
+package styledtextareafx;
 
 import javafx.application.Application;
 import javafx.event.EventHandler;

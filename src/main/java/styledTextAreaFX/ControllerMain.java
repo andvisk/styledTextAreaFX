@@ -1,4 +1,4 @@
-package styledTextAreaFX;
+package styledtextareafx;
 
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;

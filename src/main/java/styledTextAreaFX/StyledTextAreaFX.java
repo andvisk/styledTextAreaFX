@@ -1,4 +1,4 @@
-package styledTextAreaFX;
+package styledtextareafx;
 
 import java.util.ArrayList;
 import java.util.Arrays;

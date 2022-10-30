@@ -1,4 +1,4 @@
-package styledTextAreaFX;
+package styledtextareafx;
 
 import javafx.geometry.VPos;
 import javafx.scene.Group;

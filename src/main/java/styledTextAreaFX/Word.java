@@ -1,4 +1,4 @@
-package styledTextAreaFX;
+package styledtextareafx;
 
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;

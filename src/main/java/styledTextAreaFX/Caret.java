@@ -1,4 +1,4 @@
-package styledTextAreaFX;
+package styledtextareafx;
 
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Bounds;
