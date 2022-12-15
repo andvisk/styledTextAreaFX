@@ -9,24 +9,29 @@ public class TextSelection {
     private List<Paragraph> selectedParagraphList;
     private List<TextExtended> selectedTextList;
     private PathIndex startSelection;
+    private TextExtended startSelectionOnTextExt;
+
     private PathIndex endSelection;
     private Consumer consumer;
-
 
     public TextSelection() {
     }
 
-    public void selectionChange(List<Paragraph> allParagraphs, PathIndex nearestPathIndex1, PathIndex nearestPathIndex2) {
-        this.allParagraphs = allParagraphs;
+    public void selectionChange(List<Paragraph> allParagraphs, PathIndex nearestPathIndex1, PathIndex nearestPathIndex2,
+            TextExtended startSelectionOnTextExt) {
 
-        //if any selection. Object also provides deselection function, in this case both PathIndex is null
+        this.allParagraphs = allParagraphs;
+        this.startSelectionOnTextExt = startSelectionOnTextExt;
+
+        // if any selection. Object also provides deselection function, in this case
+        // both PathIndex is null
         if (nearestPathIndex1 != null && nearestPathIndex2 != null) {
             Paragraph startParagraph = null;
             Paragraph endParagraph = null;
 
-            //if first paragraph is above the second
-            if (nearestPathIndex1.getText().getParagraph().getBoundsInParent().getMinY()
-                    < nearestPathIndex2.getText().getParagraph().getBoundsInParent().getMinY()) {
+            // if first paragraph is above the second
+            if (nearestPathIndex1.getText().getParagraph().getBoundsInParent().getMinY() < nearestPathIndex2.getText()
+                    .getParagraph().getBoundsInParent().getMinY()) {
                 startParagraph = nearestPathIndex1.getText().getParagraph();
                 endParagraph = nearestPathIndex2.getText().getParagraph();
                 startSelection = nearestPathIndex1;
@@ -38,9 +43,9 @@ public class TextSelection {
                 endSelection = nearestPathIndex1;
             }
 
-            //same paragraph
+            // same paragraph
             if (startParagraph.getUuid().compareTo(endParagraph.getUuid()) == 0) {
-                //same text
+                // same text
                 if (nearestPathIndex1.getText().getUuid().compareTo(nearestPathIndex2.getText().getUuid()) == 0) {
                     if (nearestPathIndex1.getNearestIndex() < nearestPathIndex2.getNearestIndex()) {
                         startSelection = nearestPathIndex1;
@@ -50,8 +55,9 @@ public class TextSelection {
                         endSelection = nearestPathIndex1;
                     }
                 } else {
-                    //compare text indexes in paragraph
-                    if (nearestPathIndex1.getText().getIndexInParagraph() < nearestPathIndex2.getText().getIndexInParagraph()) {
+                    // compare text indexes in paragraph
+                    if (nearestPathIndex1.getText().getIndexInParagraph() < nearestPathIndex2.getText()
+                            .getIndexInParagraph()) {
                         startSelection = nearestPathIndex1;
                         endSelection = nearestPathIndex2;
                     } else {
@@ -119,7 +125,8 @@ public class TextSelection {
         }
     }
 
-    private void collectSelectedParagraphs(List<Paragraph> allParagraphs, Paragraph startParagraph, Paragraph endParagraph) {
+    private void collectSelectedParagraphs(List<Paragraph> allParagraphs, Paragraph startParagraph,
+            Paragraph endParagraph) {
         selectedParagraphList = new ArrayList<>();
         boolean add = false;
         for (int i = 0; i < allParagraphs.size(); i++) {
@@ -132,6 +139,10 @@ public class TextSelection {
                 break;
             }
         }
+    }
+
+    public TextExtended getStartSelectionOnTextExt() {
+        return startSelectionOnTextExt;
     }
 
     public List<TextExtended> getSelectedTextList() {

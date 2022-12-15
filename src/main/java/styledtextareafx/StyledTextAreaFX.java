@@ -13,7 +13,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javafx.concurrent.Task;
-import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
@@ -101,6 +100,9 @@ public class StyledTextAreaFX {
 
         if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_PRESSED)) {
             TextExtended text = getTextByCoord(mouseEvent.getX(), mouseEvent.getY());
+            if (text == null) {
+                text = getNearestTextExtended(mouseEvent.getX(), mouseEvent.getY());
+            }
             if (text != null) {
                 log.info("selected text: " + text.toString());
                 textSelection.deselectTexts();
@@ -110,8 +112,10 @@ public class StyledTextAreaFX {
                 textSelection.deselectTexts();
             }
         }
+
         if (mouseEvent.getEventType().equals(MouseEvent.MOUSE_CLICKED)) {
             TextExtended text = getTextByCoord(mouseEvent.getX(), mouseEvent.getY());
+
             if (text != null)
                 if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
                     if (mouseEvent.getClickCount() == 3) {
@@ -127,7 +131,7 @@ public class StyledTextAreaFX {
                         textSelection.deselectTexts();
                         PathIndex startPathIndex = new PathIndex(text, 0);
                         PathIndex endPathIndex = new PathIndex(text);
-                        textSelection.selectionChange(paragraphList, startPathIndex, endPathIndex);
+                        textSelection.selectionChange(paragraphList, startPathIndex, endPathIndex, text);
                         textSelection.selectTexts();
                     }
 
@@ -191,11 +195,19 @@ public class StyledTextAreaFX {
 
                 // if mouse move is not the same index or different text
                 if (nearestPathIndex.getNearestIndex() != caret.getNearestPathIndex().getNearestIndex()
-                        || caret.getiAmOnText().getUuid().compareTo(text.getUuid()) != 0) {
+                        && this.textSelection.getStartSelectionOnTextExt().getUuid().compareTo(text.getUuid()) == 0
+asdfasd
+                        && this.textSelection.getStartSelectionOnTextExt().getUuid().compareTo(text.getUuid()) == 0
+                        || this.textSelection.getStartSelectionOnTextExt().getUuid().compareTo(text.getUuid()) != 0) {
                     textSelection = new TextSelection();
-                    textSelection.selectionChange(paragraphList, nearestPathIndex, caret.getNearestPathIndex());
+                    textSelection.selectionChange(paragraphList, nearestPathIndex, caret.getNearestPathIndex(), text);
 
-                    textSelection.setConsumer(p -> ((TextSelection) p).selectTexts());
+                    final TextExtended finalText = text;
+
+                    textSelection.setConsumer(p -> {
+                        // caret.moveCaret(mousePositionLocal.x(), mousePositionLocal.y(), finalText);
+                        ((TextSelection) p).selectTexts();
+                    });
                     for (TextExtended textSel : textSelection.getSelectedTextList()) {
                         log.info("selected text: " + textSel.toString());
                     }
@@ -203,18 +215,17 @@ public class StyledTextAreaFX {
 
                     // the same text, the same index
                     if (nearestPathIndex.getNearestIndex() == caret.getNearestPathIndex().getNearestIndex()
-                            || caret.getiAmOnText().getUuid().compareTo(text.getUuid()) == 0) {
+                            || this.textSelection.getStartSelectionOnTextExt().getUuid()
+                                    .compareTo(text.getUuid()) == 0) {
                         textSelection = new TextSelection();
-                        textSelection.selectionChange(paragraphList, null, null);
+                        textSelection.selectionChange(paragraphList, null, null, text);
                         textSelection.setConsumer(p -> ((TextSelection) p).deselectTexts());
                     }
                 }
             } else {
-
                 textSelection = new TextSelection();
-                textSelection.selectionChange(paragraphList, null, null);
+                textSelection.selectionChange(paragraphList, null, null, null);
                 textSelection.setConsumer(p -> ((TextSelection) p).deselectTexts()); // mouse move out of text area
-                                                                                     // //todo select by nearest text
             }
             log.debug("mouse move, " + System.currentTimeMillis());
             return textSelection;
