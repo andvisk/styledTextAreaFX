@@ -1,16 +1,15 @@
 package styledtextareafx;
 
-import javafx.geometry.VPos;
-import javafx.scene.Group;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.paint.Color;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import javafx.geometry.VPos;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.paint.Color;
 
 public class Paragraph extends FlowPane {
 

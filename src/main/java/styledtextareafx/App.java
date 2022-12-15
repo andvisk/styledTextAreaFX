@@ -1,23 +1,21 @@
 package styledtextareafx;
 
-import javafx.application.Application;
-import javafx.event.EventHandler;
-import javafx.geometry.Pos;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
-
 import java.io.File;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.config.Configurator;
 
+import javafx.application.Application;
+import javafx.geometry.Pos;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+
 public class App extends Application {
 
     private static Logger log = LogManager.getLogger(App.class);
 
-    private Stage primaryStage;
     private ControllerMain controller;
 
     public static void main(String[] args) {
@@ -32,7 +30,6 @@ public class App extends Application {
     public void start(Stage primaryStage) {
         try {
 
-            this.primaryStage = primaryStage;
             initPrimaryStage(primaryStage);
 
         } catch (Exception e) {
@@ -51,8 +48,8 @@ public class App extends Application {
 
     }
 
-    public void stop(){
- int ii = 0;
+    public void stop() {
+
     }
 
 }

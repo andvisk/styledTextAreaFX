@@ -83,9 +83,14 @@ public class TextExtended extends Text {
         this.setSelectionEnd(indexStop);
     }
 
-    public MousePosition getLocalMousePosition(double globalX, double globalY) {
+    public Bounds getBoundsInAllParagraphsFlowPane(){
         Bounds textBoundsInParagraph = getBoundsInParent();
         Bounds textBoundsInAllParagraphsFlowPane = getParagraph().localToParent(textBoundsInParagraph);
+        return textBoundsInAllParagraphsFlowPane;
+    }
+
+    public MousePosition getLocalMousePosition(double globalX, double globalY) {
+        Bounds textBoundsInAllParagraphsFlowPane = getBoundsInAllParagraphsFlowPane();
         return new MousePosition(globalX - textBoundsInAllParagraphsFlowPane.getMinX(), globalY - textBoundsInAllParagraphsFlowPane.getMinY());
     }
 

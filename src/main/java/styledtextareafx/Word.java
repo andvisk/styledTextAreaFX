@@ -1,10 +1,9 @@
 package styledtextareafx;
 
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import javafx.scene.paint.Color;
 
 public class Word {
 
